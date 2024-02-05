@@ -1,5 +1,8 @@
 name: push-workflow
-on: push
+on: 
+  push:
+    branches:
+      - main
 jobs:
   run-lint:
     runs-on: ubuntu-latest
@@ -14,3 +17,9 @@ jobs:
         run: npm test
       - name: Build project
         run: npm run build
+      - name: upload files
+        uses: actions/upload-artifact@v3
+          name: dist-files
+          path: dist
+      - name: deploy
+        run: echo "Deploying"
