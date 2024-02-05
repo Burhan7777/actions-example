@@ -1,26 +1,43 @@
 name: push-workflow
-on: 
+on:
   push:
     branches:
       - main
 jobs:
-  run-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Install node
-        uses: actions/setup-node@v3
-      - name: install dependencies
-        run: npm ci
-      - name: Run test
-        run: npm test
-      - name: Build project
-        run: npm run build
-      - name: upload files
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-files
-          path: dist
-      - name: deploy
-        run: echo "Deploying"
+    build:
+      runs-on: ubuntu-latest
+      outputs:
+        script-file: ${{steps.publish.outputs.script-file}}
+      steps:
+        - name: get code
+          uses: actions/checkout@v3
+        - name: Install dependencies
+          run: npm cli
+        - name: run lint test
+          run: npm run lint
+        - name: run tests
+          run: npm run test
+        - name: create build
+          run: npm run build
+        - name: publis JS name
+          id: publish
+          run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
+        - name: create artifact
+          run: actions/upload-artifact@v3
+          with:
+            name: files
+            path: dist
+
+      download and deploy:
+         needs: Get code and artifcact
+         runs-on: ubuntu-latest
+         steps: 
+          - name: download artifact
+          - uses: actions/download-artifact@v3
+            with:
+              name: downloads
+          - name: JS Output
+          - run: echo "${{needs.build.outputs.script-file}}"
+          - name: deploy
+          - run: echo "Deploying"
+      
