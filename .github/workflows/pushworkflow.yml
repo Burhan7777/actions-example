@@ -19,6 +19,7 @@ jobs:
         run: npm run build
       - name: upload files
         uses: actions/upload-artifact@v3
+        with:
           name: dist-files
           path: dist
       - name: deploy
