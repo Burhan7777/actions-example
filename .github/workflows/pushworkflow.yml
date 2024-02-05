@@ -33,11 +33,11 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
         - name: download artifact
-        - uses: actions/download-artifact@v3
+          uses: actions/download-artifact@v3
           with:
             name: downloads
         - name: JS Output
-        - run: echo "${{needs.build.outputs.script-file}}"
+          run: echo "${{needs.build.outputs.script-file}}"
         - name: deploy
-        - run: echo "Deploying"
+          run: echo "Deploying"
       
