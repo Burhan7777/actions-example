@@ -28,16 +28,16 @@ jobs:
             name: files
             path: dist
 
-      download and deploy:
-         needs: Get code and artifcact
-         runs-on: ubuntu-latest
-         steps: 
-          - name: download artifact
-          - uses: actions/download-artifact@v3
-            with:
-              name: downloads
-          - name: JS Output
-          - run: echo "${{needs.build.outputs.script-file}}"
-          - name: deploy
-          - run: echo "Deploying"
+    download and deploy:
+        needs: Get code and artifcact
+        runs-on: ubuntu-latest
+        steps: 
+        - name: download artifact
+        - uses: actions/download-artifact@v3
+          with:
+            name: downloads
+        - name: JS Output
+        - run: echo "${{needs.build.outputs.script-file}}"
+        - name: deploy
+        - run: echo "Deploying"
       
