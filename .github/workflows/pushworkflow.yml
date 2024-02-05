@@ -22,7 +22,7 @@ jobs:
         - name: publis JS name
           id: publish
           run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
-        - name: create artifact
+        - name: artifact
           uses: actions/upload-artifact@v3
           with:
             name: files
@@ -32,10 +32,10 @@ jobs:
         needs: build
         runs-on: ubuntu-latest
         steps: 
-        - name: download artifact
-          uses: actions/download-artifact@v3
-          with:
-            name: downloads
+        # - name: download artifact
+        #   uses: actions/download-artifact@v3
+        #   with:
+        #     name: artifact
         - name: JS Output
           run: echo "${{needs.build.outputs.script-file}}"
         - name: deploy
