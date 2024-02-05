@@ -28,7 +28,7 @@ jobs:
             name: files
             path: dist
 
-    download and deploy:
+    deploy:
         needs: build
         runs-on: ubuntu-latest
         steps: 
