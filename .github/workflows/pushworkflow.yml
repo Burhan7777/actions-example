@@ -1,43 +1,31 @@
-name: push-workflow
+name: deployment-workflow
 on:
   push:
     branches:
-      - main
-jobs:
-    build:
-      runs-on: ubuntu-latest
-      outputs:
-        script-file: ${{steps.publish.outputs.script-file}}
-      steps:
-        - name: get code
-          uses: actions/checkout@v3
-        - name: Install dependencies
-          run: npm ci
-        - name: run lint test
-          run: npm run lint
-        - name: run tests
-          run: npm run test
-        - name: create build
-          run: npm run build
-        - name: publis JS name
-          id: publish
-          run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
-        - name: artifact
-          uses: actions/upload-artifact@v3
-          with:
-            name: files
-            path: dist
-
-    deploy:
-        needs: build
-        runs-on: ubuntu-latest
-        steps: 
-        # - name: download artifact
-        #   uses: actions/download-artifact@v3
-        #   with:
-        #     name: artifact
-        - name: JS Output
-          run: echo "${{needs.build.outputs.script-file}}"
-        - name: deploy
-          run: echo "Deploying"
+      -main
+job:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v3
+      - name: cache dep
+        uses: actions/cache@v3
+        with:
+          path: ~./npm
+          key: dep-${{hashFiles(**/package-lock.json)}}
+      - name: get dep
+        run: npm ci
+      - name: run lint
+        run: npm run lint
+      - name: run test
+        run: npm run test
+      - name: make build
+        run: npm run build
+      - name: build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: dist
+      
       
