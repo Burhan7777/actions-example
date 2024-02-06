@@ -1,0 +1,30 @@
+name : Matrix Workflow
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    strategy:
+    matrix:
+      node-version: [12,14,18]
+      os: [ubuntu-latest,macos-latest]
+    runs-on: ${{matrix.os}}
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+         node-version: ${{matrix.node-version}}
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+         path: node-modules
+         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dep
+        if steps.cache.output.cache-hit != true:
+        run: npm ci
+      - name: Build project
+        run: npm run build
